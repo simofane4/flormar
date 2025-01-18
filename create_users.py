@@ -59,3 +59,51 @@ for i in range(1, 101):
         except IntegrityError as e:
             print(f"Duplicate entry found. Retrying... ({str(e)})")
             fake.unique.clear()  # Clear the uniqueness cache to retry
+
+
+
+"""
+
+    path('admin/', admin.site.urls),
+    path('api/auth/', include('user_profile.urls')), # auth
+    path('api/', include('products.urls')), # Product 
+    path('api/', include('cart.urls')), # cart 
+    path('api/', include('order.urls')), # Proorderduct 
+    path('api/', include('checkout.urls')), # checkout 
+        # Categories
+    path('categories/', CategoryListCreateView.as_view(), name='category-list-create'),
+    path('categories/<int:pk>/', CategoryDetailView.as_view(), name='category-detail'),
+    
+    # Products
+    path('products/', ProductListCreateView.as_view(), name='product-list-create'),
+    path('products/<int:pk>/', ProductDetailView.as_view(), name='product-detail'),
+    
+    # Product Images
+    path('product-images/', ProductImageListCreateView.as_view(), name='product-image-list-create'),
+    path('product-images/<int:pk>/', ProductImageDetailView.as_view(), name='product-image-detail'),
+    
+    # Product Variations
+    path('product-variations/', ProductVariationListCreateView.as_view(), name='product-variation-list-create'),
+    path('product-variations/<int:pk>/', ProductVariationDetailView.as_view(), name='product-variation-detail'),
+    
+    # Custom Views
+    path('popular-products/', PopularProductsView.as_view(), name='popular-products'),
+    path('categories/<int:category_id>/products/', ProductsByCategoryView.as_view(), name='products-by-category'),
+    path('login/', LoginView.as_view(), name='login'),
+    path('refresh-token/', TokenRefreshView.as_view(), name='token_refresh'),  # Refresh token endpoint
+    path("sign-in-with-token/", SignInWithTokenView.as_view(), name="sign-in-with-token"),
+    path('me/', SignedInUserView.as_view(), name='signed-in-user'),
+    path('orders/', views.list_orders, name='order-list'),
+    path('order/<int:order_id>/', views.view_order, name='order-detail'),
+    path('order/create/', views.create_order, name='order-create'),
+    path('order/update-status/<int:order_id>/', views.update_order_status, name='order-update-status'),
+    path('order/delete/<int:order_id>/', views.delete_order, name='order-delete'),
+    path('checkout/', views.checkout, name='checkout'),
+    path('update-payment-status/<int:order_id>/', views.update_payment_status, name='update-payment-status'),
+    path('cart/', CartView.as_view(), name='cart-view'),  # View the cart
+    path('cart/add/', AddCartItemView.as_view(), name='add-to-cart'),  # Add item to cart
+    path('cart/update/', UpdateCartItemView.as_view(), name='update-cart-item'),  # Update item quantity
+    path('cart/remove/', RemoveCartItemView.as_view(), name='remove-from-cart'),  # Remove item from cart
+    path('cart/clear/', ClearCartView.as_view(), name='clear-cart'),  # Clear the cart
+
+"""

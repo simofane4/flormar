@@ -2,7 +2,8 @@
 
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from .models import Order, PurchaseTracker
+from .models import Order
+from products.models import PurchaseTracker
 
 @receiver(post_save, sender=Order)
 def update_purchase_tracker(sender, instance, created, **kwargs):
