@@ -21,6 +21,12 @@ class UserProfile(AbstractUser):
     )
     profile_image = models.ImageField(upload_to='profile_pics/', blank=True, null=True)  # New field
     phone_number = models.CharField(max_length=15, unique=True, blank=True, null=True)
+    discount_percentage = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        default=0.00,
+        help_text="Le pourcentage de remise pour le client."
+    )
     assigned_seller = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="clients", null=True, blank=True, on_delete=models.SET_NULL)
     city = models.ForeignKey(City, related_name="residents", null=True, blank=True, on_delete=models.SET_NULL)
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="created_profiles", null=True, blank=True, on_delete=models.SET_NULL)

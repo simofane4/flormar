@@ -74,5 +74,27 @@ class ProductVariation(models.Model):
     )  # Price increase for this variation
     image = models.ImageField(upload_to=variant_image_path, blank=True, null=True)  # Variation image
     sku = models.CharField(max_length=25)
+    bonus_threshold = models.PositiveIntegerField(default=0)  # Nombre nécessaire pour le bonus
+
     def __str__(self):
         return f"{self.attribute_name}: {self.attribute_value}"
+
+
+
+
+class PurchaseTracker(models.Model):
+    client = models.ForeignKey(User, on_delete=models.CASCADE)
+    variation = models.ForeignKey(ProductVariation, on_delete=models.CASCADE)
+    quantity_purchased = models.PositiveIntegerField(default=0)
+    bonus_claimed = models.BooleanField(default=False)
+
+
+    def check_and_award_bonus(self):
+        if not self.bonus_claimed and self.quantity_purchased >= self.variation.bonus_threshold:
+            self.bonus_claimed = True
+            self.save(update_fields=['bonus_claimed'])
+            return True
+        return False
+
+    def __str__(self):
+        return f"{self.client.username} - {self.variation.variation_name} - {self.quantity_purchased}"
