@@ -1,0 +1,44 @@
+# -- Python builds & caches --
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.so
+
+# -- Environments --
+venv/
+env/
+.venv/
+ENV/
+*.egg-info/
+.eggs/
+
+# -- Django Migrations --
+**/migrations/__pycache__/
+**/migrations/*.pyc
+# Ila bghiti tchouf migrations f Git, hadek smah matsuprihch
+# walakin ila bghiti tchuf them, chdo l-comment
+
+
+# -- Secrets / Envs --
+*.env
+.env
+.env.*
+# Hna fi .env t9der t7et SECRET_KEY w token, etc. 7san ma yhotch f Git
+
+# -- Database Files --
+*.sqlite3
+*.db
+
+# -- Logs & Local stuff --
+*.log
+local_settings.py
+
+# -- Media / Uploaded files (ila bghitihom tchdo f Git hadek 7do) --
+media/
+
+# -- Editor/IDE & System stuff --
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
