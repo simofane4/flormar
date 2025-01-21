@@ -26,6 +26,6 @@ class CartAdmin(admin.ModelAdmin):
 # Customizing Cart Item Admin View
 @admin.register(CartItem)
 class CartItemAdmin(admin.ModelAdmin):
-    list_display = ('cart', 'product', 'quantity')
-    list_filter = ('cart__client', 'product')
-    search_fields = ('product__title', 'cart__client__username')
+    list_display = ('cart', 'product_variation', 'quantity')
+    list_filter = ('cart__client', 'product_variation')
+    search_fields = ('product_variation__product__title', 'cart__client__username')

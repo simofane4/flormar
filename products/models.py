@@ -44,7 +44,7 @@ class Product(models.Model):
     quantity = models.IntegerField(default=1)
     views = models.IntegerField(default=0)
     is_deleted = models.BooleanField(default=False)
-    barcode = models.CharField(max_length=25)
+    
     
     
     def __str__(self):
@@ -72,8 +72,10 @@ class ProductVariation(models.Model):
     additional_price = models.DecimalField(
         max_digits=10, decimal_places=2, null=True, blank=True
     )  # Price increase for this variation
+    barcode = models.CharField(max_length=25)
     image = models.ImageField(upload_to=variant_image_path, blank=True, null=True)  # Variation image
     sku = models.CharField(max_length=25)
+    
     bonus_threshold = models.PositiveIntegerField(default=0)  # Nombre nécessaire pour le bonus
 
     def __str__(self):
@@ -97,4 +99,4 @@ class PurchaseTracker(models.Model):
         return False
 
     def __str__(self):
-        return f"{self.client.username} - {self.variation.variation_name} - {self.quantity_purchased}"
+        return f"{self.client.username} - {self.variation.attribute_name} - {self.quantity_purchased}"

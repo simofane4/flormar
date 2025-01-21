@@ -1,0 +1,79 @@
+[
+    {
+        "model": "products.category",
+        "pk": 11,
+        "fields": {
+            "name": "Face",
+            "icon": "category/icons/face.png",
+            "parent": null,
+            "created": "2025-01-18T12:00:00Z",
+            "modified": "2025-01-18T12:00:00Z"
+        }
+    },
+    {
+        "model": "products.category",
+        "pk": 12,
+        "fields": {
+            "name": "Eyes",
+            "icon": "category/icons/eyes.png",
+            "parent": null,
+            "created": "2025-01-18T12:00:00Z",
+            "modified": "2025-01-18T12:00:00Z"
+        }
+    },
+    {
+        "model": "products.category",
+        "pk":13,
+        "fields": {
+            "name": "Lips",
+            "icon": "category/icons/lips.png",
+            "parent": null,
+            "created": "2025-01-18T12:00:00Z",
+            "modified": "2025-01-18T12:00:00Z"
+        }
+    },
+    {
+        "model": "products.category",
+        "pk": 14,
+        "fields": {
+            "name": "Nails",
+            "icon": "category/icons/nails.png",
+            "parent": null,
+            "created": "2025-01-18T12:00:00Z",
+            "modified": "2025-01-18T12:00:00Z"
+        }
+    },
+    {
+        "model": "products.category",
+        "pk": 15,
+        "fields": {
+            "name": "Skin Care",
+            "icon": "category/icons/skin-care.png",
+            "parent": null,
+            "created": "2025-01-18T12:00:00Z",
+            "modified": "2025-01-18T12:00:00Z"
+        }
+    },
+    {
+        "model": "products.category",
+        "pk": 16,
+        "fields": {
+            "name": "Accessories",
+            "icon": "category/icons/accessories.png",
+            "parent": null,
+            "created": "2025-01-18T12:00:00Z",
+            "modified": "2025-01-18T12:00:00Z"
+        }
+    },
+    {
+        "model": "products.category",
+        "pk": 17,
+        "fields": {
+            "name": "Vegan",
+            "icon": "category/icons/vegan.png",
+            "parent": null,
+            "created": "2025-01-18T12:00:00Z",
+            "modified": "2025-01-18T12:00:00Z"
+        }
+    }
+]

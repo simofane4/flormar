@@ -2,27 +2,29 @@
 
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+
+from cart.models import CartItem
 from .models import Order
-from products.models import PurchaseTracker
+from products.models import ProductVariation, PurchaseTracker
 
 @receiver(post_save, sender=Order)
 def update_purchase_tracker(sender, instance, created, **kwargs):
-    """
-    Signal باش ملي يتسيفا Order جديد (created=True),
-    كنزِيدو quantity_purchased ف PurchaseTracker
-    ديال داك الكلايان وديك الفارييشن.
-    """
     if created:
-        # kay9eleb واش كاين PurchaseTracker بقيم client/variation
-        # ila ma-kainch, kaycrea wa7ed jdyd
-        tracker, _ = PurchaseTracker.objects.get_or_create(
-            client=instance.client,
-            variation=instance.variation,
-        )
-        # kanzido f quantity_purchased 9ad quantity dial had l-Order
-        tracker.quantity_purchased += instance.quantity
-        # kan7afdo
-        tracker.save()
+        # Get all CartItems from the cart
+        cart_items = CartItem.objects.filter(cart=instance.cart)
+
+        for cart_item in cart_items:
+            variation = cart_item.product_variation  # Get the ProductVariation
+            
+            # Create or update the tracker for each variation
+            tracker, _ = PurchaseTracker.objects.get_or_create(
+                client=instance.client,
+                variation=variation,
+            )
+            
+            # Update the quantity purchased
+            tracker.quantity_purchased += cart_item.quantity
+            tracker.save()
 
 
 @receiver(post_save, sender=PurchaseTracker)
