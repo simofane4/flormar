@@ -4,7 +4,8 @@
 *.pyd
 __pycache__/
 *.so
-
+FETCH_HEAD
+[38
 # -- Environments --
 venv/
 env/

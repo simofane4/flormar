@@ -1,0 +1,35 @@
+# Redirect HTTP to HTTPS
+server {
+    listen 80;
+    server_name your_domain_or_ip;
+    return 301 https://$host$request_uri;
+}
+
+# HTTPS server
+server {
+    listen 443 ssl;
+    server_name wsale-backend.flormar.ma;
+
+    # SSL certificates
+    ssl_certificate /etc/ssl/site/flormar.ma/fullchain.pem;
+    ssl_certificate_key /etc/ssl/site/flormar.ma/privkey.pem;
+
+    # SSL configuration
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+    ssl_prefer_server_ciphers on;
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location /static/ {
+        root /home/site/flormar;
+    }
+
+    location /media/ {
+        root /home/site/flormar;
+    }
+
+    location / {
+        include uwsgi_params;
+        uwsgi_pass unix:/home/site/flormar/uwsgi.sock;  # Path to your uWSGI socket file
+    }
+}

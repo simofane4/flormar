@@ -3,57 +3,49 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
+from .models import UserProfile ,City
 
-UserProfile = get_user_model()
+
+User = get_user_model()
 
 class UserProfileSerializer(serializers.ModelSerializer):
+    assigned_seller = serializers.PrimaryKeyRelatedField(
+        queryset=UserProfile.objects.filter(role='seller'),
+        required=False,
+        allow_null=True
+    )
+    city = serializers.PrimaryKeyRelatedField(
+        queryset=City.objects.all(),
+        required=False,
+        allow_null=True
+    )
+    profile_image = serializers.ImageField(required=False, allow_null=True)
+
     class Meta:
         model = UserProfile
         fields = [
-            'id',
-            'username',
-            'role',
-            'first_name',
-            'last_name',
-            'email',
-            'profile_image',
-            'phone_number',
-            'assigned_seller',
-            'city',
+            'id', 'username', 'role', 'first_name', 'last_name',
+            'email', 'profile_image', 'phone_number', 'assigned_seller',
+            'city', 'discount_percentage'
         ]
         extra_kwargs = {
-            'username': {'required': False, 'allow_blank': True},
-            'phone_number': {'required': True, 'allow_blank': False},  # Enforce phone number
+            'password': {'write_only': True},
+            'phone_number': {'required': True}
         }
 
-    def validate_phone_number(self, value):
-        """
-        Check that the phone number is unique.
-        """
-        if UserProfile.objects.filter(phone_number=value).exists():
-            raise serializers.ValidationError("A user with this phone number already exists.")
-        return value
-
     def create(self, validated_data):
-        """
-        Custom create method to handle user creation.
-        """
-        return UserProfile.objects.create(**validated_data)
+        password = validated_data.pop('password', None)
+        user = UserProfile(**validated_data)
+        if password:
+            user.set_password(password)
+        user.save()
+        return user
 
     def update(self, instance, validated_data):
-        """
-        Custom update method.
-        """
-        instance.username = validated_data.get('username', instance.username)
-        instance.phone_number = validated_data.get('phone_number', instance.phone_number)
-        instance.role = validated_data.get('role', instance.role)
-        instance.profile_image = validated_data.get('profile_image', instance.profile_image)
-        instance.assigned_seller = validated_data.get('assigned_seller', instance.assigned_seller)
-        instance.city = validated_data.get('city', instance.city)
-        instance.updated_by = validated_data.get('updated_by', instance.updated_by)
-
-        instance.save()
-        return instance
+        password = validated_data.pop('password', None)
+        if password:
+            instance.set_password(password)
+        return super().update(instance, validated_data)
 
 
 User = get_user_model()
@@ -62,7 +54,7 @@ class SignedInUserSerializer(serializers.ModelSerializer):
     city_name = serializers.CharField(source='city.name', read_only=True)  # Assuming City model has 'name'
 
     class Meta:
-        model = User
+        model = UserProfile
         fields = [
             'id',
             'username',
@@ -74,3 +66,31 @@ class SignedInUserSerializer(serializers.ModelSerializer):
             'city_name',
             'profile_image',
         ]
+
+
+
+
+
+class CitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = City
+        fields = ['id', 'name']
+        read_only_fields = ['id']
+
+class SellerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'phone_number', 'first_name', 'last_name', 'email', 'city']
+        extra_kwargs = {
+            'password': {'write_only': True},
+            'phone_number': {'required': True}
+        }
+
+    def create(self, validated_data):
+        password = validated_data.pop('password', None)
+        user = User(**validated_data)
+        if password:
+            user.set_password(password)
+        user.role = 'seller'
+        user.save()
+        return user
