@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}Manage TVs and Videos{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Manage TVs and Videos</h1>
+
+    <!-- Form to assign video to multiple TVs -->
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="tvs" class="form-label">Select TVs</label>
+            <select class="form-select" name="tvs" id="tvs" multiple>
+                {% for tv in tvs %}
+                <option value="{{ tv.id }}">{{ tv.name }} (Current Video: {{ tv.current_video.title|default:'None' }})</option>
+                {% endfor %}
+            </select>
+            <small class="form-text text-muted">Hold down the Ctrl (Windows) or Command (Mac) button to select multiple TVs.</small>
+        </div>
+
+        <div class="mb-3">
+            <label for="video" class="form-label">Select Video</label>
+            <select class="form-select" name="video" id="video">
+                {% for video in videos %}
+                    <option value="{{ video.id }}">{{ video.title }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <button type="submit" name="assign_video" class="btn btn-primary">Assign Video</button>
+    </form>
+
+    <hr>
+
+    <!-- Video Upload Form -->
+    <h2>Upload Video</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="title" class="form-label">Video Title</label>
+            <input type="text" class="form-control" id="title" name="title" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="video_file" class="form-label">Select Video File</label>
+            <input type="file" class="form-control" id="video_file" name="video_file" required>
+        </div>
+
+        <button type="submit" name="upload_video" class="btn btn-success">Upload Video</button>
+    </form>
+
+    <hr>
+
+    <!-- List of videos with delete option -->
+    <h2>Uploaded Videos</h2>
+    <ul>
+        {% for video in videos %}
+            <li>
+                <strong>{{ video.title }}</strong> - 
+                <a href="#" class="btn btn-danger btn-sm">Delete</a>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <hr>
+
+    <!-- Current TV states -->
+    <h2>Current TV States</h2>
+    <ul>
+        {% for tv in tvs %}
+            <li>
+                <strong>{{ tv.name }}</strong> - Current Video: {{ tv.current_video.title|default:"None" }} (Last Update: {{ tv.last_update }})
+
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

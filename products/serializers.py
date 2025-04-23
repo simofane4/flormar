@@ -24,11 +24,11 @@ class ProductSerializer(serializers.ModelSerializer):
     images = ProductImageSerializer(many=True, read_only=True)  # Nested ProductImage
     variations = ProductVariationSerializer(many=True, read_only=True)  # Nested ProductVariation
     category_name = serializers.CharField(source="category.name", read_only=True)  # Additional field
-
+    #barcode = ''
     class Meta:
         model = Product
         fields = [
             'id', 'category', 'category_name', 'title', 'price', 'image', 
-            'description', 'quantity', 'views', 'is_deleted', 'barcode', 'sku',
+            'description', 'quantity', 'views', 'is_deleted',  
             'images', 'variations'
         ]

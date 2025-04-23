@@ -1,0 +1,60 @@
+{% extends 'partials/base.html' %}
+{% load static %} 
+{% block title %}Dashboard{% endblock %}
+{% block extra_css %}
+<link href="{% static 'libs/select2/dist/css/select2.min.css'%}" rel="stylesheet" type="text/css" />
+<link href="{% static 'libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css'%}" rel="stylesheet" type="text/css">
+<link href="{% static 'libs/bootstrap-timepicker/css/bootstrap-timepicker.min.css'%}" rel="stylesheet" type="text/css">
+<link href="{% static 'libs/spectrum-colorpicker2/dist/spectrum.min.css'%}" rel="stylesheet" type="text/css">
+<link href="{% static 'libs/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.css'%}" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="{% static 'libs/@chenfengyuan/datepicker/dist/datepicker.min.css'%}" type="text/css" 
+{% endblock %}
+{% block contents %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Upload Video</h4>
+                <p class="card-title-desc">Upload your video and provide a title.</p>
+                <div>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="tvs" class="form-label">Select TVs</label>
+                            <select name="tvs" id="tvs" class="select2 form-control select2-multiple" multiple="multiple" data-placeholder="Choose ...">
+                                                            
+                                {% for tv in tvs %}
+                                <option value="{{ tv.id }}">{{ tv.name }} (Current Video: {{ tv.current_video.title|default:'None' }})</option>
+                                {% endfor %}
+                                                               
+                                                            
+                             </select>
+                            
+                            <small class="form-text text-muted">Hold down the Ctrl (Windows) or Command (Mac) button to select multiple TVs.</small>
+                        </div>
+                
+                        <div class="mb-3">
+                            <label for="video" class="form-label">Select Video</label>
+                            <select class="form-select" name="video" id="video">
+                                {% for video in videos %}
+                                    <option value="{{ video.id }}">{{ video.title }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                
+                        <button type="submit" name="assign_video" class="btn btn-primary">Assign Video</button>
+                    </form>
+                </div>
+            </div><!-- end card-body -->
+        </div><!-- end card -->
+    </div><!-- end col -->
+    
+</div>
+
+
+{% endblock %}
+{% block extra_javascript %}
+    <script src="{% static 'libs/select2/dist/js/select2.min.js'%}"></script>
+     <!-- form advanced init -->
+     <script src="{% static 'js/pages/form-advanced.init.js'%}"></script>
+{% endblock %}

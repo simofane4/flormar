@@ -1,0 +1,62 @@
+{% extends 'partials/base.html' %}
+{% load static %} 
+{% block title %}Upload Video{% endblock %}
+
+{% block extra_css %}
+<link href="{% static 'libs/dropzone/dist/min/dropzone.min.css' %}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+
+{% block contents %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Upload Video</h4>
+                <p class="card-title-desc">Upload your video and provide a title.</p>
+
+                <!-- Input field for video title -->
+                <!-- <div class="form-group mb-3">
+                    <label for="video-title" class="form-label">Video Title</label>
+                    <input type="text" id="video-title" class="form-control" placeholder="Enter video title">
+                </div> -->
+
+                <div>
+                    <div class="form-group mb-3">
+                        <label for="video-title" class="form-label">Video Title</label>
+                        <input type="text" id="video-title" name="title" class="form-control" placeholder="Enter video title">
+                    </div>
+                    <form action="#" class="dropzone" id="video-upload-dropzone" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <!-- Input field for video title -->
+                        
+                        <div class="fallback">
+                            <input name="file" type="file" accept="video/*" multiple="multiple">
+                        </div>
+                        <div class="dz-message needsclick">
+                            <div class="mb-3">
+                                <i class="display-4 text-muted bx bxs-cloud-upload"></i>
+                            </div>
+                            <h4>Drop video files here or click to upload.</h4>
+                        </div>
+                    </form>
+                    
+                </div>
+
+                <!-- Button to trigger video upload -->
+                <div class="text-center mt-4">
+                    <button type="button" class="btn btn-primary waves-effect waves-light" onclick="submitVideoUpload()">Send Video</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}
+{% block extra_javascript %}
+        <!-- Plugins js -->
+        <script src="{% static 'libs/dropzone/dist/min/dropzone.min.js' %}"></script>
+
+{% endblock %}

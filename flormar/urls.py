@@ -19,6 +19,7 @@ from django.urls import include, path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', include('core.urls')), # checkout 
     path('api/auth/', include('user_profile.urls')), # auth
     path('api/', include('products.urls')), # Product 
     path('api/', include('cart.urls')), # cart 

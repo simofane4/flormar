@@ -109,6 +109,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'user_profile.UserProfile'
 
 AUTHENTICATION_BACKENDS = [
+    'core.backends.PhoneNumberBackend',  # Custom backend
     'user_profile.authentication.PhoneNumberBackend',
     'django.contrib.auth.backends.ModelBackend',  # Required for admin
 ]
@@ -178,3 +179,6 @@ LOGGING = {
         },
     },
 }
+
+LOGIN_REDIRECT_URL = '/'  # Where to redirect after login
+LOGOUT_REDIRECT_URL = '/'  # Where to redirect after logout

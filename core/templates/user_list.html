@@ -1,0 +1,252 @@
+{% extends 'partials/base.html' %}
+
+{% load static %} 
+
+{% block title %}User list{% endblock %}
+
+
+
+{% block contents %}
+
+
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    
+                    <div class="d-flex flex-wrap gap-3 align-items-center">
+                        <h4 class="card-title mb-4">User List</h4>
+                    
+                        <button type="button" class="btn btn-primary ms-auto" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#userCreateModal"
+                            data-bs-whatever="@fat">
+                            Create User
+                        </button>
+                    </div>
+                    <div class="modal fade" id="userCreateModal" tabindex="-1" aria-labelledby="userCreateModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="userCreateModalLabel">Create New User</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form method="post" enctype="multipart/form-data" action="{% url 'user_list' %}">
+                                    <div class="modal-body">
+                                        {% csrf_token %}
+                                        
+                                        <div class="mb-3">
+                                            <label for="id_username" class="form-label">Username</label>
+                                            <input type="text" class="form-control" id="id_username" name="username" required>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label for="id_email" class="form-label">Email</label>
+                                            <input type="email" class="form-control" id="id_email" name="email">
+                                        </div>
+                                        
+                                        <div class="row mb-3">
+                                            <div class="col">
+                                                <label for="id_first_name" class="form-label">First Name</label>
+                                                <input type="text" class="form-control" id="id_first_name" name="first_name">
+                                            </div>
+                                            <div class="col">
+                                                <label for="id_last_name" class="form-label">Last Name</label>
+                                                <input type="text" class="form-control" id="id_last_name" name="last_name">
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="row mb-3">
+                                            <div class="col">
+                                                <label for="id_password1" class="form-label">Password</label>
+                                                <input type="password" class="form-control" id="id_password1" name="password1" required>
+                                            </div>
+                                            <div class="col">
+                                                <label for="id_password2" class="form-label">Confirm Password</label>
+                                                <input type="password" class="form-control" id="id_password2" name="password2" required>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label for="id_role" class="form-label">Role</label>
+                                            <select class="form-select" id="id_role" name="role">
+                                                {% for value, label in UserRole.choices %}
+                                                    <option value="{{ value }}">{{ label }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label for="id_phone_number" class="form-label">Phone Number</label>
+                                            <input type="text" class="form-control" id="id_phone_number" name="phone_number">
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label for="id_profile_image" class="form-label">Profile Image</label>
+                                            <input type="file" class="form-control" id="id_profile_image" name="profile_image">
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label for="id_discount_percentage" class="form-label">Discount Percentage</label>
+                                            <input type="number" step="0.01" class="form-control" id="id_discount_percentage" name="discount_percentage" value="0.00">
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label for="id_assigned_seller" class="form-label">Assigned Seller</label>
+                                            <select class="form-select" id="id_assigned_seller" name="assigned_seller">
+                                                <option value="">None</option>
+                                                {% for seller in sellers %}
+                                                    <option value="{{ seller.id }}">{{ seller.get_full_name|default:seller.username }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label for="id_city" class="form-label">City</label>
+                                            <select class="form-select" id="id_city" name="city">
+                                                <option value="">None</option>
+                                                {% for city in cities %}
+                                                    <option value="{{ city.id }}">{{ city.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Create User</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table align-middle table-nowrap mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th style="width: 20px;">
+                                        <div class="form-check font-size-16 align-middle">
+                                            <input class="form-check-input" type="checkbox" id="userCheckAll" onchange="checkAll(this)">
+                                            <label class="form-check-label" for="userCheckAll"></label>
+                                        </div>
+                                    </th>
+                                    <th class="align-middle">Username</th>
+                                    <th class="align-middle">Email</th>
+                                    <th class="align-middle">Phone</th>
+                                    <th class="align-middle">Role</th>
+                                    <th class="align-middle">City</th>
+                                    <th class="align-middle">Joined On</th>
+                                    <th class="align-middle">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for user in users %}
+                                <tr>
+                                    <td>
+                                        <div class="form-check font-size-16">
+                                            <input class="form-check-input" type="checkbox" id="userCheck{{ forloop.counter }}">
+                                            <label class="form-check-label" for="userCheck{{ forloop.counter }}"></label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a href="javascript:void(0);" class="text-body fw-bold">
+                                            {{ user.username }}
+                                        </a>
+                                    </td>
+                                    <td>{{ user.email|default:"-" }}</td>
+                                    <td>{{ user.phone_number|default:"-" }}</td>
+                                    <td>
+                                        <span class="badge bg-{% if user.role == 'admin' %}danger{% elif user.role == 'seller' %}warning{% else %}success{% endif %}">
+                                            {{ user.get_role_display }}
+                                        </span>
+                                    </td>
+                                    <td>{{ user.city.name|default:"-" }}</td>
+                                    <td>{{ user.date_joined|date:"d M, Y" }}</td>
+                                    <td>
+                                        <button type="button" 
+                                                class="btn btn-primary btn-sm btn-rounded waves-effect waves-light"
+                                                onclick="viewUserDetails('{{ user.id }}')">
+                                            View
+                                        </button>
+                                        <button type="button" 
+                                                class="btn btn-danger btn-sm btn-rounded waves-effect waves-light"
+                                                onclick="deleteUser('{{ user.id }}')">
+                                            Delete
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+        
+    </div>
+
+<!-- JavaScript for actions -->
+
+{% endblock contents %}
+
+{% block  extra_javascript  %}
+
+<script src="{% static 'js/pages/modal.init.js' %}"></script>
+<script>
+    function checkAll(source) {
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = source.checked;
+        });
+    }
+    
+    function viewUserDetails(userId) {
+        // Implement view details logic (e.g., open modal)
+        console.log("View user:", userId);
+    }
+    
+    function deleteUser(userId) {
+        if (confirm("Are you sure you want to delete this user?")) {
+            // Implement delete logic (e.g., fetch API or form submission)
+            console.log("Delete user:", userId);
+        }
+    }
+</script>
+<script>
+    // Add this to your JavaScript file or in a script tag
+document.addEventListener('DOMContentLoaded', function() {
+    // If you want to handle form submission via AJAX
+    const userCreateForm = document.querySelector('#userCreateModal form');
+    if (userCreateForm) {
+        userCreateForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            
+            fetch(this.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Handle success (close modal, show message, refresh list, etc.)
+                    $('#userCreateModal').modal('hide');
+                    location.reload(); // Or update the user list dynamically
+                } else {
+                    // Show form errors
+                    console.error(data.errors);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    }
+});
+</script>
+
+{% endblock extra_javascript %}

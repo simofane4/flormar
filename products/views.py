@@ -19,7 +19,7 @@ class ProductListCreateView(generics.ListCreateAPIView):
     queryset = Product.objects.prefetch_related('images', 'variations').all()
     serializer_class = ProductSerializer
     filter_backends = [filters.SearchFilter]
-    search_fields = ['title', 'description', 'barcode', 'sku']
+    search_fields = ['title', 'description']
 
 # Retrieve, Update, and Delete a Product
 class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):

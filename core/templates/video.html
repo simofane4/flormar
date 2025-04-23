@@ -1,0 +1,55 @@
+{% extends 'partials/base.html' %}
+
+{% block title %}{{ video.title }}{% endblock %}
+
+{% block extra_css %}
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+{% endblock %}
+
+
+
+{% block contents %}
+<div class="row">
+    
+        <div class="card">
+            <div class="card-body">
+
+                <h4 class="card-title">Responsive embed video 16:9</h4>
+                <p class="card-title-desc">Aspect ratios can be customized with modifier classes.</p>
+
+                <!-- 16:9 aspect ratio -->
+                <div class="ratio ratio-16x9">
+                    <video id="video" controls autoplay width="640" height="360">
+       
+                    </video>
+                </div>
+            </div><!-- end card-body -->
+        </div><!-- end card -->
+    <!-- end col -->
+
+
+</div>
+
+
+
+
+{% endblock %}
+{% block extra_javascript %}
+<script>
+    if (Hls.isSupported()) {
+        var video = document.getElementById('video');
+        var hls = new Hls();
+        hls.loadSource('{{ hls_url }}');
+        hls.attachMedia(video);
+    }
+</script>
+
+{% endblock %}
+
+    
+   
+
+    
+
+</body>
+</html>
