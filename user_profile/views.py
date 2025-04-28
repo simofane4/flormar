@@ -71,23 +71,26 @@ class LoginView(APIView):
         if serializer.is_valid():
             phone_number = serializer.validated_data['phone_number']
             password = serializer.validated_data['password']
-
+            sheck_phone = UserProfile.objects.filter(phone_number=phone_number).exists()
             # Authenticate user using phone number
-            user = authenticate(request, phone_number=phone_number, password=password)
+            if sheck_phone:
+                user = authenticate(request, phone_number=phone_number, password=password)
 
-            if user is not None:
-                # Generate JWT tokens
-                refresh = RefreshToken.for_user(user)
-                access_token = refresh.access_token
+                if user is not None:
+                    # Generate JWT tokens
+                    refresh = RefreshToken.for_user(user)
+                    access_token = refresh.access_token
 
-                return Response({
-                    'refresh': str(refresh),
-                    'access': str(access_token),
-                    'role': user.role,
-                }, status=status.HTTP_200_OK)
-
+                    return Response({
+                        'refresh': str(refresh),
+                        'access': str(access_token),
+                        'role': user.role,
+                    }, status=status.HTTP_200_OK)
+                else:
+                    return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)                
+            
             else:
-                return Response({"error": "Invalid phone number or password"}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"error": "Phone number does not exist"}, status=status.HTTP_400_BAD_REQUEST)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

@@ -21,6 +21,7 @@ class ProductListCreateView(generics.ListCreateAPIView):
     filter_backends = [filters.SearchFilter]
     search_fields = ['title', 'description']
 
+
 # Retrieve, Update, and Delete a Product
 class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Product.objects.prefetch_related('images', 'variations').all()
@@ -48,7 +49,15 @@ class ProductVariationDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = ProductVariation.objects.select_related('product').all()
     serializer_class = ProductVariationSerializer
 
-
+# Custom Views
+class SearchProductsView(APIView):
+    def get(self, request):
+        query = request.query_params.get('query', '')
+        products = Product.objects.filter(title__icontains=query, is_deleted=False)
+        serializer = ProductSerializer(products, many=True)
+        return Response(serializer.data)
+    
+    
 class PopularProductsView(APIView):
     def get(self, request):
         products = Product.objects.filter(is_deleted=False).order_by('-views')[:10]

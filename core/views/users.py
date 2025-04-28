@@ -37,11 +37,13 @@ def user_list(request):
     users = UserProfile.objects.all().order_by('-date_joined')  # Example: newest first
     if request.method == 'POST':
         form = UserProfileForm(request.POST, request.FILES)
+        
         if form.is_valid():
             user = form.save()
             messages.success(request, f'User {user.username} created successfully!')
             return redirect('users_list')  # Replace with your actual redirect URL
     else:
+        print(form.errors)
         form = UserProfileForm()
     
     context = {
